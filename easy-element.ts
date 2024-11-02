@@ -1,14 +1,24 @@
-export class ShadowElem extends HTMLElement {
-    constructor(innerShadowHTML: string) {
-        super();
-        this.attachShadow({ mode: "open" });
+export function EasyElementInHTML(TagName: string, InnerHtml: string, shadowDOM: boolean, ...classList: string[]): void {
+    class EasyElem extends HTMLElement {
+        constructor() {
+            super();
+            if (shadowDOM) {
+                this.attachShadow({ mode: "open" });
+                let shadow = this.shadowRoot;
+                if (shadow) shadow.innerHTML = InnerHtml;
+            }
+            else {
+                this.innerHTML = InnerHtml;
+            }
 
-        let shadow = this.shadowRoot;
-        if(shadow) shadow.innerHTML = innerShadowHTML;
+            classList?.forEach((c) => {
+                this.classList.add(c);
+            })
+        }
     }
+    customElements.define(TagName.toLowerCase(), EasyElem,);
 }
 
-export function ElementAsShadow(elem: HTMLElement): HTMLElement {
-    return (new ShadowElem(elem.innerHTML)) as HTMLElement;
+export function EasyElement(TagName: string, ElementConstructor: () => typeof HTMLElement): void {
+    customElements.define(TagName, ElementConstructor());
 }
-
