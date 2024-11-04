@@ -1,4 +1,8 @@
-export function EasyElementInHTML(TagName: string, InnerHtml: string, shadowDOM: boolean, ...classList: string[]): void {
+export function EasyElement(TagName: string, elem: any): void {
+    customElements.define(TagName.toLowerCase(), elem);
+}
+
+export function EasyElementInHTML(TagName: string, InnerHtml: string, shadowDOM: boolean = true, ...classList: string[]): void {
     class EasyElem extends HTMLElement {
         constructor() {
             super();
@@ -16,9 +20,15 @@ export function EasyElementInHTML(TagName: string, InnerHtml: string, shadowDOM:
             })
         }
     }
-    customElements.define(TagName.toLowerCase(), EasyElem,);
+
+    EasyElement(TagName, EasyElem)
 }
 
-export function EasyElement(TagName: string, ElementConstructor: () => typeof HTMLElement): void {
-    customElements.define(TagName, ElementConstructor());
+export function EasyElementToComponent(Component: string, shadowDOM: boolean = false): void {
+    const comp = document.querySelector(`*[component="${Component}"]`) ?? new Element();
+    comp.removeAttribute("component")
+    if (!comp.hasAttribute("copy")) {
+        comp.remove()
+    }
+    EasyElementInHTML(Component, comp.outerHTML ?? "", shadowDOM)
 }
