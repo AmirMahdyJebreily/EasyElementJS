@@ -24,6 +24,21 @@ export function EasyElementInHTML(TagName: string, InnerHtml: string, shadowDOM:
     EasyElement(TagName, EasyElem)
 }
 
+export function EasyElementInTemplate(TagName: string, SelectorQuery: string): void {
+    class EasyElem extends HTMLElement {
+        constructor() {
+            super();
+            let template = document.querySelector(`*[component="${SelectorQuery}"]`) ?? new Element();
+            let templateContent = template.content;
+      
+            const shadowRoot = this.attachShadow({ mode: "open" });
+            shadowRoot.appendChild(templateContent.cloneNode(true));
+        }
+    }
+
+    EasyElement(TagName, EasyElem)
+}
+
 export function EasyElementToComponent(Component: string, shadowDOM: boolean = false): void {
     const comp = document.querySelector(`*[component="${Component}"]`) ?? new Element();
     comp.removeAttribute("component")

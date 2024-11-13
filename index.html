@@ -8,8 +8,11 @@
 </head>
 <body>
     <my-title></my-title>
-    <button component="my-btn" copy>this is my <slot></slot></button>
-    <my-btn id="2">butoon</my-btn>
-    <my-btn id="3"></my-btn>
+    <template component="my-btn" copy>
+        <button>
+            this is my <slot name="entityName"></slot>
+        </button>
+    </template>
+    <my-btn id="2"><span slot="entityName">butoon</span></my-btn>
 </body>
 </html>
